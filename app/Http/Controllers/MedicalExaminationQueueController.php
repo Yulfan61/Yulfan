@@ -4,12 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\MedicalExaminationQueue;
 use Illuminate\Http\Request;
+use App\Mail\MedicalExaminationQueueMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use PDF;
 
 class MedicalExaminationQueueController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $queues = MedicalExaminationQueue::all();
+        $query = MedicalExaminationQueue::query();
+
+        if ($request->has('search')) {
+            $query->where('patient_name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->has('examination_type')) {
+            $query->where('examination_type', $request->input('examination_type'));
+        }
+
+        if ($request->has('date')) {
+            $query->whereDate('examination_datetime', $request->input('date'));
+        }
+
+        $queues = $query->paginate(10);
+
         return view('medical_examination_queues.index', compact('queues'));
     }
 
@@ -52,6 +71,8 @@ class MedicalExaminationQueueController extends Controller
 
         $queue->update($request->only('patient_name', 'examination_type', 'examination_notes','patient_type', 'examination_datetime', 'gender'));
 
+        
+
         return redirect()->route('medical_examination_queues.index')->with('success', 'Medical examination queue updated successfully.');
     }
 
@@ -60,5 +81,16 @@ class MedicalExaminationQueueController extends Controller
         $queue->delete();
 
         return redirect()->route('medical_examination_queues.index')->with('success', 'Medical examination queue deleted successfully.');
+    }
+
+    public function show(MedicalExaminationQueue $queue)
+    {
+        return view('queues.show', compact('queue'));
+    }
+
+    public function downloadQueue(MedicalExaminationQueue $queue)
+    {
+        $pdf = PDF::loadView('queues.download', compact('queue'));
+        return $pdf->download('Laporan Pemeriksaan.pdf');
     }
 }

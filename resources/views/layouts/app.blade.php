@@ -1,3 +1,5 @@
+<!-- resources/views/layouts/app.blade.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +21,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('medical_examination_queues.index') }}">Daftar Pasien</a>
                     </li>
-                    <!-- Tambahkan item navbar lainnya di sini -->
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     @guest
@@ -36,19 +37,17 @@
                         </form>
                     @endguest
                 </ul>
-            </div>
-            <div class="navbar-text text-white">
-    {{ \Carbon\Carbon::now()->locale('id_ID')->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
-</div>
+                <div class="navbar-text text-white ms-3">
+                    {{ \Carbon\Carbon::now()->locale('id_ID')->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
+                </div>
 
-            @auth
-    <div class="navbar-text text-white">
-        Logged in as: {{ auth()->user()->name }}
-        @if(auth()->user()->avatar)
-            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="User Avatar" style="width: 30px; height: 30px; border-radius: 50%;">
-        @endif
-    </div>
-@endauth
+                @auth
+                <div class="navbar-text text-white ms-3">
+                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" class="rounded-circle" alt="User Image" width="30" height="30">
+                    Logged in as: {{ auth()->user()->name }}
+                </div>
+                @endauth
+            </div>
         </div>
     </nav>
 

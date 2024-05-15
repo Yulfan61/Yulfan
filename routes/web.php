@@ -26,6 +26,10 @@ Route::put('/medical-examination-queues/{queue}', [MedicalExaminationQueueContro
 // Route untuk menghapus antrian pemeriksaan
 Route::delete('/medical-examination-queues/{queue}', [MedicalExaminationQueueController::class, 'destroy'])->name('medical_examination_queues.destroy');
 
+Route::get('medical_examination_queues/{queue}', [MedicalExaminationQueueController::class, 'show'])->name('medical_examination_queues.show');
+Route::get('/queues/{queue}/download', [MedicalExaminationQueueController::class, 'downloadQueue'])->name('downloadQueue');
+
+
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');

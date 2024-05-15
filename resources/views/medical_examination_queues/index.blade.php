@@ -3,6 +3,14 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="mb-3">
+    <form method="GET" action="{{ route('medical_examination_queues.index') }}">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Cari pasien...">
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </div>
+    </form>
+</div>
     <div class="container">
         <h1>Antrean Pemeriksaan Kesehatan</h1>
         <a href="{{ route('medical_examination_queues.create') }}" class="btn btn-primary">Tambah Pasien</a>
@@ -31,6 +39,7 @@
                         <td>{{ $queue->examination_datetime }}</td>
                         
                         <td>
+                        <a href="{{ route('medical_examination_queues.show', $queue->id) }}" class="btn btn-info btn-sm">Lihat</a>
                             <a href="{{ route('medical_examination_queues.edit', $queue) }}" class="btn btn-sm btn-warning">Edit</a>
                             <form action="{{ route('medical_examination_queues.destroy', $queue) }}" method="POST" style="display: inline;">
                                 @csrf
@@ -43,4 +52,7 @@
             </tbody>
         </table>
     </div>
+    <div>
+    {{ $queues->links() }}
+</div>
 @endsection
